@@ -2,9 +2,10 @@ import streamlit as st
 import numpy as np
 from utils.api_handler import get_available_currencies, get_exchange_rate
 from utils.data_loader import fetch_inflation_data
-from utils.charts import plot_exchange_rate, plot_inflation, plot_inflation_comparison
+from utils.charts import plot_exchange_rate, plot_inflation, plot_inflation_comparison, plot_global_inflation_map
 from utils.insights import generate_insights
 from utils.metric_tooltip import metric_with_tooltip
+from utils.global_data import fetch_global_inflation
 
 # -------------------------------------------------------------------
 # 🔹 Streamlit Page Config
@@ -168,3 +169,18 @@ st.caption(
     "Data Sources: [Frankfurter API](https://www.frankfurter.app/) for exchange rates and "
     "[World Bank](https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG) for inflation data."
 )
+
+
+# -------------------------------------------------------------------
+# 🌍 Global Inflation Map
+# -------------------------------------------------------------------
+st.markdown("### 🌍 Global Inflation Overview")
+
+if st.button("Load Global Inflation Map"):
+    with st.spinner("Fetching global inflation data..."):
+        global_df = fetch_global_inflation()
+    if not global_df.empty:
+        st.plotly_chart(plot_global_inflation_map(global_df), use_container_width=True)
+        st.caption("Data Source: World Bank (Annual CPI %)")
+    else:
+        st.warning("No global data available at the moment.")

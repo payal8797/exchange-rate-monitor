@@ -37,3 +37,20 @@ def plot_inflation_comparison(df1, df2, country1, country2):
     )
     fig.update_layout(height=400)
     return fig
+
+def plot_global_inflation_map(latest_data):
+    """Generate world map showing latest inflation by country."""
+    if latest_data.empty:
+        return None
+
+    fig = px.choropleth(
+        latest_data,
+        locations="Country Code",
+        color="Inflation Rate",
+        hover_name="Country",
+        color_continuous_scale="RdYlGn_r",
+        title="🌍 Global Inflation Map (Latest Year Available)",
+        range_color=(0, 15),
+    )
+    fig.update_layout(height=500, margin=dict(l=0, r=0, t=50, b=0))
+    return fig
